@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .wrap{
+        width: 590px;
+        height: 470px;
+        margin: 100px auto;
+        position: relative;
+    }
+    .wrap ul li {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: none;
+    }
+    .wrap ul li:first-child {
+        display: block;
+    }
+    .wrap ul li img{
+        width: 590px;
+        height: 470px;
+    }
+    .arrow a{
+        width: 20px;
+        height: 40px;
+        position: absolute;
+        top: 220px;
+        background-color: rgba(0,0,0,.5);
+        color:#fff;
+        text-align: center;
+        line-height: 40px;
+        font-size: 20px;
+        text-decoration: none;
+    }
+    .arrow {
+        opacity: .4;
+    }
+    .arrow:hover {
+        opacity: 1;
+    } 
+    .arrow .left {
+        left: 0;
+    }
+    .arrow .right {
+        right: 0;
+    }
+    
+    ol {
+        position: absolute;
+        bottom: 10px;
+        left: 12%;
+        transform: translateX(-50%);
+        border-radius: 20px;
+        padding: 0 5px;
+    }
+    
+    ol li {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 2px solid rgba(255,255,255,.4);
+        float: left;
+        margin: 3px 5px;
+        cursor: pointer;
+    }
+    
+    .now {
+        border: 1px solid rgb(255,255,255);
+        background: rgba(255,255,255,.7);
+        box-shadow: 0 0 0 4px rgba(255,255,255,.3);
+    }
+
+</style>
+</head>
+<body>
+    <div class="wrap">
+        <ul>
+            <li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/2.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/3.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/4.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/5.jpg" alt=""></a></li>
+            <li><a href="#"><img src="img/6.jpg" alt=""></a></li>
+        </ul>
+        
+        <div class="arrow">
+            <a href="javascript:void(0)" class="left">&lt;</a>
+            <a href="javascript:void(0)" class="right">&gt;</a>
+        </div>
+        
+        <ol>
+            <!-- 小圆点 -->
+        </ol>
+    </div>
+</body>
+<script src="js/jquery.js"></script>
+<script>
+    $(document).ready(function() {
+        var $wrap = $('.wrap');
+        var $arrowLeft = $('.left');
+        var $arrowRight = $('.right');
+        var $uLi = $('.wrap ul li');
+        var $ol = $('.wrap ol');
+
+        var imgNum = $('.wrap ul li').length;    // 图片的数量
+        var index = 0;
+        var num = 0;
+
+        // 根据图片的数量动态生成小圆点
+        while(num < imgNum) {
+            $ol.append("<li></li>");
+            num++;
+        }
+
+        var $oLi = $('.wrap ol li');
+
+        // 默认给第一个小圆点添加now类
+        $oLi.first().addClass('now');  
+
+        // 鼠标画上小圆点，显示出对应的图片
+        $oLi.mouseover(function() {
+            $(this).addClass('now').siblings().removeClass('now');
+            index = $(this).index();
+            $uLi.eq(index).fadeIn().siblings().fadeOut();
+        });
+
+
+        //右箭头
+        $arrowRight.click(function() {
+            index++;
+            if(index>imgNum-1) {
+                index = 0;
+            }
+            $uLi.eq(index).fadeIn().siblings().fadeOut();
+            $oLi.eq(index).addClass('now').siblings().removeClass('now');
+        });
+
+
+        //左箭头
+        $arrowLeft.click(function() {
+            index--;
+            if(index<0) {
+                index = imgNum-1;
+            }
+            $uLi.eq(index).fadeIn().siblings().fadeOut();
+            $oLi.eq(index).addClass('now').siblings().removeClass('now');
+        });
+        //自动切换图片
+        var timeId = setInterval(function() {
+            $arrowRight.click();
+        }, 3000);
+        //鼠标划上切换图片
+        $wrap.hover(function() {clearInterval(timeId);}, function(){
+            timeId = setInterval(function(){
+                $arrowRight.click();
+            }, 3000); 
+        });
+    });
+
+</script>
+</html>
